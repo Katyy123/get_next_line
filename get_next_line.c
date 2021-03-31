@@ -6,22 +6,11 @@
 /*   By: cfiliber <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 19:28:26 by cfiliber          #+#    #+#             */
-/*   Updated: 2021/03/18 20:39:33 by cfiliber         ###   ########.fr       */
+/*   Updated: 2021/03/31 20:19:08 by cfiliber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-int	get_next_line(int fd, char **line)
-{
-	size_t	nbyte;
-
-	if (fd == -1 || !(line))
-		return (0);
-	nbyte = read(fd, *line, nbyte);
-	return (nbyte);
-}
-
 #include <fcntl.h>
 #include <unistd.h>
 #include <limits.h>
@@ -30,6 +19,24 @@ int	get_next_line(int fd, char **line)
 #include <string.h>
 #include <sys/types.h>
 #include <sys/uio.h>
+
+int	ft_count_byte()
+{
+	int nbyte;
+
+	nbyte = 10;
+}
+
+int	get_next_line(int fd, char **line)
+{
+	size_t	nbyte_read;
+
+	if (fd == -1 || !(line))
+		return (0);
+	nbyte_toread = ft_count_byte();
+	nbyte_read = read(fd, *line, nbyte_toread);
+	return ();
+}
 
 int	main(void)
 {
