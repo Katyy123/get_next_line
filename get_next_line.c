@@ -6,19 +6,14 @@
 /*   By: cfiliber <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 19:28:26 by cfiliber          #+#    #+#             */
-/*   Updated: 2021/04/26 17:32:36 by cfiliber         ###   ########.fr       */
+/*   Updated: 2021/04/26 18:21:12 by cfiliber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <fcntl.h>
-#include <unistd.h>
-#include <limits.h>
-#include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
-#include <sys/types.h>
-#include <sys/uio.h>
+#include <fcntl.h>
 
 ssize_t	ft_detect_line()
 {
