@@ -6,7 +6,7 @@
 /*   By: cfiliber <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 19:28:26 by cfiliber          #+#    #+#             */
-/*   Updated: 2021/03/31 20:19:08 by cfiliber         ###   ########.fr       */
+/*   Updated: 2021/04/26 17:32:36 by cfiliber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,31 +20,37 @@
 #include <sys/types.h>
 #include <sys/uio.h>
 
-int	ft_count_byte()
+ssize_t	ft_detect_line()
 {
-	int nbyte;
+	ssize_t nbyte;
 
-	nbyte = 10;
+	nbyte = 4;
+	return (nbyte);
 }
 
 int	get_next_line(int fd, char **line)
 {
-	size_t	nbyte_read;
+	ssize_t	nbyte_read;
+	ssize_t	nbyte_toread;
 
 	if (fd == -1 || !(line))
+		return (-1);
+	nbyte_toread = ft_detect_line();
+	nbyte_read = read(fd, *line, 5);
+	if (nbyte_read == 0)
 		return (0);
-	nbyte_toread = ft_count_byte();
-	nbyte_read = read(fd, *line, nbyte_toread);
-	return ();
+	if (nbyte_read == -1)
+		return (-1);
+	return (nbyte_read);
 }
 
 int	main(void)
 {
 	int		fd;
-	char**	ptr;
-
-	ptr[100] = "Questo e' la prima riga del file.\nQuesta e' la seconda riga. Questa e' la terza e ultima.\n";
+	char	*ptr;
+	//char str[100] = "Questa e' la prima riga del file.\nQuesta e' la seconda riga.\nQuesta e' la terza e ultima.";
+	//ptr = &str[0];
 	fd = open("file.txt", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
-	write(fd, ptr, strlen(ptr));
-	printf("%d\n", get_next_line(fd, ptr));
+	//write(fd, ptr, strlen(ptr));
+	printf("%d\n", get_next_line(fd, &ptr));
 }
