@@ -6,19 +6,20 @@
 /*   By: cfiliber <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 19:28:26 by cfiliber          #+#    #+#             */
-/*   Updated: 2021/04/26 18:21:12 by cfiliber         ###   ########.fr       */
+/*   Updated: 2021/05/06 20:37:40 by cfiliber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
+#include <stdio.h>//need it for printf
 #include <string.h>
-#include <fcntl.h>
+#include <fcntl.h>//need it for open
 
 ssize_t	ft_detect_line()
 {
 	ssize_t nbyte;
 
+	
 	nbyte = 4;
 	return (nbyte);
 }
@@ -27,11 +28,12 @@ int	get_next_line(int fd, char **line)
 {
 	ssize_t	nbyte_read;
 	ssize_t	nbyte_toread;
+	char	buf[BUFFER_SIZE + 1];
 
 	if (fd == -1 || !(line))
 		return (-1);
 	nbyte_toread = ft_detect_line();
-	nbyte_read = read(fd, *line, 5);
+	nbyte_read = read(fd, *line, BUFFER_SIZE);
 	if (nbyte_read == 0)
 		return (0);
 	if (nbyte_read == -1)
