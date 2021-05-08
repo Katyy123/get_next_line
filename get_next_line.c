@@ -6,48 +6,91 @@
 /*   By: cfiliber <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 19:28:26 by cfiliber          #+#    #+#             */
-/*   Updated: 2021/05/06 20:37:40 by cfiliber         ###   ########.fr       */
+/*   Updated: 2021/05/08 20:31:45 by cfiliber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>//need it for printf
-#include <string.h>
-#include <fcntl.h>//need it for open
 
-ssize_t	ft_detect_line()
+char	*ft_strdup(const char *s1)
 {
-	ssize_t nbyte;
+	void	*ptr;
+	size_t	tot_size;
 
-	
-	nbyte = 4;
-	return (nbyte);
+	tot_size = sizeof(const char) * (ft_strlen(s1) + 1);
+	ptr = malloc(tot_size);
+	if (!(ptr = malloc(tot_size)))
+		return (0);
+	ft_memcpy(ptr, s1, tot_size);
+	return (ptr);
+}
+
+char	*ft_lines_split(char *stat_arr, char **line, ssize_t byte_read)
+{
+	unsigned int	i;
+	char			*tmp;
+
+	i = 0;
+	while (stat_arr[i])
+	{
+		if (stat_arr[i] == '\n')
+			break ;
+		i++;
+	}
+	if (i < ft_strlen(stat_arr))
+	{
+		*line = ft_substr(stat_arr, 0, i);
+		tmp = ft_substr(stat_arr, i + 1, ft_strlen(stat_arr));
+		free(stat_arr);
+		stat_arr = ft_strdup(tmp);
+		free(tmp);
+	}
+	else if (byte_read == 0)
+	{
+		*line = stat_arr;
+		stat_arr = NULL;
+	}
+	return (stat_arr);
+}
+
+char	*ft_store_line(char *buf, char *stat_arr)
+{
+	char			*tmp;
+
+	if (stat_arr)
+	{
+		tmp = ft_strjoin(stat_arr, buf);
+		free(stat_arr);
+		stat_arr = ft_strdup(tmp);
+		free(tmp);
+	}
+	else
+		stat_arr = ft_strdup(buf);
+	return (stat_arr);
 }
 
 int	get_next_line(int fd, char **line)
 {
-	ssize_t	nbyte_read;
-	ssize_t	nbyte_toread;
-	char	buf[BUFFER_SIZE + 1];
+	static char	*stat_arr[4096];
+	char		buf[BUFFER_SIZE + 1];
+	ssize_t		byte_read;
 
-	if (fd == -1 || !(line))
-		return (-1);
-	nbyte_toread = ft_detect_line();
-	nbyte_read = read(fd, *line, BUFFER_SIZE);
-	if (nbyte_read == 0)
-		return (0);
-	if (nbyte_read == -1)
-		return (-1);
-	return (nbyte_read);
-}
-
-int	main(void)
-{
-	int		fd;
-	char	*ptr;
-	//char str[100] = "Questa e' la prima riga del file.\nQuesta e' la seconda riga.\nQuesta e' la terza e ultima.";
-	//ptr = &str[0];
-	fd = open("file.txt", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
-	//write(fd, ptr, strlen(ptr));
-	printf("%d\n", get_next_line(fd, &ptr));
+	while ((byte_read = read(fd, buf, BUFFER_SIZE)))
+	{
+		if (byte_read == -1)
+			return (-1);
+		buf[byte_read] = '\0';
+		stat_arr[fd] = ft_store_line(buf, stat_arr[fd]);
+		if (ft_strchr(buf, '\n'))
+			break ;
+	}
+	if (byte_read == 0 && !stat_arr[fd])
+	{
+		*line = ft_strdup("");
+		return (byte_read);
+	}
+	stat_arr[fd] = ft_lines_split(stat_arr[fd], line, byte_read);
+	if (byte_read <= 0 && !stat_arr[fd])
+		return (byte_read);
+	return (1);
 }
